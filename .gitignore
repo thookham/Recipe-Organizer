@@ -1,0 +1,28 @@
+# PowerShell
+*.psd1
+*.psm1
+*.ps1xml
+
+# Build Artifacts
+Release/
+*.zip
+*.exe
+!RecipeOrganizer.exe # We might want to track the source, but usually we ignore binaries. 
+# Actually, since we build it, let's ignore the compiled exe in the root if it exists, but we are building to Release/
+# Let's ignore the root exe if we compiled it there by mistake
+RecipeOrganizer.exe
+
+# User Specific
+TestFiles/
+EdgeCases/
+KeywordTest/
+ZipTest/
+OrganizedRecipes/
+OrganizedEdgeCases/
+OrganizedKeywords/
+OrganizedZip/
+OrganizedReleaseTest/
+
+# OS
+Thumbs.db
+Desktop.ini
