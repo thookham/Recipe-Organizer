@@ -36,11 +36,11 @@ You can run the PowerShell script directly:
 ### Command Line Parameters
 | Parameter | Alias | Description | Default |
 | :--- | :--- | :--- | :--- |
-| `-SourcePath` | `-Src`, `-S` | The folder to search for recipes. | `MyDocuments` |
-| `-DestinationPath` | `-Dest`, `-D` | The folder to move/copy recipes to. | `C:\Recipes` |
-| `-Mode` | `-M` | Operation mode: `Test`, `Copy`, `Move`. | `Test` |
-| `-NoRecurse` | | If set, only searches the top-level folder (no subfolders). | `False` |
-| `-Keywords` | | Custom list of keywords to search for. | *See below* |
+| `-SourcePath` | `-src`, `-s` | The folder to search for recipes. | `MyDocuments` |
+| `-DestinationPath` | `-dst`, `-d` | The folder to move/copy recipes to. | `C:\Recipes` |
+| `-Mode` | `-mod`, `-m` | Operation mode: `Test`, `Copy`, `Move`. | `Test` |
+| `-NoRecurse` | `-nr` | If set, only searches the top-level folder (no subfolders). | `False` |
+| `-Keywords` | `-key`, `-k` | Custom list of keywords to search for. | *See below* |
 
 **Default Keywords:** "Ingredients", "Directions", "Recipe", "Servings", "Prep time", "Cook time", "Instructions", "Method", "Yield", "Total time", "Nutrition", "Calories".
 

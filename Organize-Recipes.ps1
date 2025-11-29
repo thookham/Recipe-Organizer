@@ -34,22 +34,24 @@
 [CmdletBinding()]
 param (
     [Parameter(Mandatory = $false)]
-    [Alias("Src", "S")]
+    [Alias("src", "s")]
     [string]$SourcePath = [Environment]::GetFolderPath("MyDocuments"),
 
     [Parameter(Mandatory = $false)]
-    [Alias("Dest", "D")]
+    [Alias("dst", "d")]
     [string]$DestinationPath = "C:\Recipes",
 
     [Parameter(Mandatory = $false)]
-    [Alias("M")]
+    [Alias("mod", "m")]
     [ValidateSet("Test", "Copy", "Move")]
     [string]$Mode = "Test",
 
     [Parameter(Mandatory = $false)]
+    [Alias("key", "k")]
     [string[]]$Keywords = @("Ingredients", "Directions", "Recipe", "Servings", "Prep time", "Cook time", "Instructions", "Method", "Yield", "Total time", "Nutrition", "Calories"),
 
     [Parameter(Mandatory = $false)]
+    [Alias("nr")]
     [switch]$NoRecurse
 )
 
