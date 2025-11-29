@@ -1,5 +1,5 @@
 # Generate-EdgeCases.ps1
-$TestDir = "c:/Users/thook/Documents/Antigravity/Recipe Finder/EdgeCases"
+$TestDir = Join-Path $PSScriptRoot "EdgeCases"
 New-Item -Path $TestDir -ItemType Directory -Force | Out-Null
 
 # 1. Number Start (Should go to '#')
