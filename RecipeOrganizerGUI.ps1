@@ -19,53 +19,76 @@ $e_monkey = Get-Emoji 0x1F648
 $e_party = Get-Emoji 0x1F389
 $e_pan = Get-Emoji 0x1F958
 
+# --- Colors ---
+$c_header = [System.Drawing.Color]::FromArgb(255, 255, 140, 0) # Dark Orange
+$c_bg = [System.Drawing.Color]::WhiteSmoke
+$c_btn_action = [System.Drawing.Color]::FromArgb(255, 46, 204, 113) # Emerald Green
+$c_btn_text = [System.Drawing.Color]::White
+$c_text = [System.Drawing.Color]::FromArgb(255, 44, 62, 80) # Dark Blue/Grey
+
 # --- Form Setup ---
 $form = New-Object System.Windows.Forms.Form
 $form.Text = "$e_cooking Recipe Organizer"
-$form.Size = New-Object System.Drawing.Size(600, 350)
+$form.Size = New-Object System.Drawing.Size(600, 400)
 $form.StartPosition = "CenterScreen"
 $form.FormBorderStyle = "FixedDialog"
 $form.MaximizeBox = $false
-$form.BackColor = [System.Drawing.Color]::WhiteSmoke
+$form.BackColor = $c_bg
+$form.ForeColor = $c_text
 
 # --- Fonts ---
-# Explicitly use Segoe UI Emoji for controls with emojis to ensure rendering
-$fontTitle = New-Object System.Drawing.Font("Segoe UI Emoji", 12, [System.Drawing.FontStyle]::Bold)
-$fontRegular = New-Object System.Drawing.Font("Segoe UI", 9)
-$fontBold = New-Object System.Drawing.Font("Segoe UI", 9, [System.Drawing.FontStyle]::Bold)
-$fontEmoji = New-Object System.Drawing.Font("Segoe UI Emoji", 9)
-$fontEmojiBold = New-Object System.Drawing.Font("Segoe UI Emoji", 9, [System.Drawing.FontStyle]::Bold)
+$fontTitle = New-Object System.Drawing.Font("Segoe UI Emoji", 14, [System.Drawing.FontStyle]::Bold)
+$fontRegular = New-Object System.Drawing.Font("Segoe UI", 10)
+$fontBold = New-Object System.Drawing.Font("Segoe UI", 10, [System.Drawing.FontStyle]::Bold)
+$fontEmoji = New-Object System.Drawing.Font("Segoe UI Emoji", 10)
+$fontEmojiBold = New-Object System.Drawing.Font("Segoe UI Emoji", 10, [System.Drawing.FontStyle]::Bold)
 $fontLog = New-Object System.Drawing.Font("Consolas", 9)
 
-# --- Header ---
+# --- Header Panel ---
+$pnlHeader = New-Object System.Windows.Forms.Panel
+$pnlHeader.Location = New-Object System.Drawing.Point(0, 0)
+$pnlHeader.Size = New-Object System.Drawing.Size(600, 60)
+$pnlHeader.BackColor = $c_header
+$form.Controls.Add($pnlHeader)
+
 $lblHeader = New-Object System.Windows.Forms.Label
 $lblHeader.Text = "Organize Your Kitchen! $e_salad"
-$lblHeader.Location = New-Object System.Drawing.Point(20, 10)
-$lblHeader.Size = New-Object System.Drawing.Size(560, 30)
+$lblHeader.Location = New-Object System.Drawing.Point(0, 0)
+$lblHeader.Size = New-Object System.Drawing.Size(600, 60)
 $lblHeader.Font = $fontTitle
+$lblHeader.ForeColor = [System.Drawing.Color]::White
 $lblHeader.TextAlign = "MiddleCenter"
-$form.Controls.Add($lblHeader)
+$lblHeader.BackColor = [System.Drawing.Color]::Transparent
+$pnlHeader.Controls.Add($lblHeader)
+
+# --- Main Content Panel ---
+$pnlMain = New-Object System.Windows.Forms.Panel
+$pnlMain.Location = New-Object System.Drawing.Point(0, 60)
+$pnlMain.Size = New-Object System.Drawing.Size(600, 340)
+$form.Controls.Add($pnlMain)
 
 # --- Source Path ---
 $lblSource = New-Object System.Windows.Forms.Label
 $lblSource.Text = "$e_folder Source Folder:"
-$lblSource.Location = New-Object System.Drawing.Point(20, 50)
+$lblSource.Location = New-Object System.Drawing.Point(20, 20)
 $lblSource.AutoSize = $true
 $lblSource.Font = $fontEmojiBold
-$form.Controls.Add($lblSource)
+$pnlMain.Controls.Add($lblSource)
 
 $txtSource = New-Object System.Windows.Forms.TextBox
-$txtSource.Location = New-Object System.Drawing.Point(20, 75)
+$txtSource.Location = New-Object System.Drawing.Point(20, 45)
 $txtSource.Size = New-Object System.Drawing.Size(450, 25)
 $txtSource.Text = [Environment]::GetFolderPath("MyDocuments")
 $txtSource.Font = $fontRegular
-$form.Controls.Add($txtSource)
+$pnlMain.Controls.Add($txtSource)
 
 $btnSource = New-Object System.Windows.Forms.Button
 $btnSource.Text = "Browse"
-$btnSource.Location = New-Object System.Drawing.Point(480, 74)
+$btnSource.Location = New-Object System.Drawing.Point(480, 44)
 $btnSource.Size = New-Object System.Drawing.Size(80, 27)
 $btnSource.Font = $fontRegular
+$btnSource.FlatStyle = "Flat"
+$btnSource.BackColor = [System.Drawing.Color]::White
 $btnSource.Add_Click({
         $dlg = New-Object System.Windows.Forms.FolderBrowserDialog
         $dlg.SelectedPath = $txtSource.Text
@@ -73,28 +96,30 @@ $btnSource.Add_Click({
             $txtSource.Text = $dlg.SelectedPath
         }
     })
-$form.Controls.Add($btnSource)
+$pnlMain.Controls.Add($btnSource)
 
 # --- Destination Path ---
 $lblDest = New-Object System.Windows.Forms.Label
 $lblDest.Text = "$e_target Destination Folder:"
-$lblDest.Location = New-Object System.Drawing.Point(20, 110)
+$lblDest.Location = New-Object System.Drawing.Point(20, 80)
 $lblDest.AutoSize = $true
 $lblDest.Font = $fontEmojiBold
-$form.Controls.Add($lblDest)
+$pnlMain.Controls.Add($lblDest)
 
 $txtDest = New-Object System.Windows.Forms.TextBox
-$txtDest.Location = New-Object System.Drawing.Point(20, 135)
+$txtDest.Location = New-Object System.Drawing.Point(20, 105)
 $txtDest.Size = New-Object System.Drawing.Size(450, 25)
 $txtDest.Text = "C:\Recipes"
 $txtDest.Font = $fontRegular
-$form.Controls.Add($txtDest)
+$pnlMain.Controls.Add($txtDest)
 
 $btnDest = New-Object System.Windows.Forms.Button
 $btnDest.Text = "Browse"
-$btnDest.Location = New-Object System.Drawing.Point(480, 134)
+$btnDest.Location = New-Object System.Drawing.Point(480, 104)
 $btnDest.Size = New-Object System.Drawing.Size(80, 27)
 $btnDest.Font = $fontRegular
+$btnDest.FlatStyle = "Flat"
+$btnDest.BackColor = [System.Drawing.Color]::White
 $btnDest.Add_Click({
         $dlg = New-Object System.Windows.Forms.FolderBrowserDialog
         $dlg.SelectedPath = $txtDest.Text
@@ -102,77 +127,80 @@ $btnDest.Add_Click({
             $txtDest.Text = $dlg.SelectedPath
         }
     })
-$form.Controls.Add($btnDest)
+$pnlMain.Controls.Add($btnDest)
 
 # --- Options ---
 $lblMode = New-Object System.Windows.Forms.Label
 $lblMode.Text = "$e_gear Mode:"
-$lblMode.Location = New-Object System.Drawing.Point(20, 180)
+$lblMode.Location = New-Object System.Drawing.Point(20, 150)
 $lblMode.AutoSize = $true
 $lblMode.Font = $fontEmojiBold
-$form.Controls.Add($lblMode)
+$pnlMain.Controls.Add($lblMode)
 
 $cmbMode = New-Object System.Windows.Forms.ComboBox
-$cmbMode.Location = New-Object System.Drawing.Point(90, 177)
+$cmbMode.Location = New-Object System.Drawing.Point(90, 147)
 $cmbMode.Size = New-Object System.Drawing.Size(100, 25)
 $cmbMode.Items.AddRange(@("Test", "Copy", "Move"))
 $cmbMode.SelectedIndex = 0
 $cmbMode.DropDownStyle = "DropDownList"
 $cmbMode.Font = $fontRegular
-$form.Controls.Add($cmbMode)
+$pnlMain.Controls.Add($cmbMode)
 
 $chkNoRecurse = New-Object System.Windows.Forms.CheckBox
 $chkNoRecurse.Text = "$e_no Top folder only (No Recursion)"
-$chkNoRecurse.Location = New-Object System.Drawing.Point(220, 178)
+$chkNoRecurse.Location = New-Object System.Drawing.Point(220, 148)
 $chkNoRecurse.AutoSize = $true
 $chkNoRecurse.Font = $fontEmoji
-$form.Controls.Add($chkNoRecurse)
+$pnlMain.Controls.Add($chkNoRecurse)
 
 # --- Progress Bar ---
 $progressBar = New-Object System.Windows.Forms.ProgressBar
-$progressBar.Location = New-Object System.Drawing.Point(20, 220)
-$progressBar.Size = New-Object System.Drawing.Size(540, 20)
+$progressBar.Location = New-Object System.Drawing.Point(20, 190)
+$progressBar.Size = New-Object System.Drawing.Size(540, 10)
 $progressBar.Style = "Marquee"
 $progressBar.MarqueeAnimationSpeed = 0
-$form.Controls.Add($progressBar)
+$pnlMain.Controls.Add($progressBar)
 
 # --- Status Label ---
 $lblStatus = New-Object System.Windows.Forms.Label
 $lblStatus.Text = "Ready to organize! $e_cooking"
-$lblStatus.Location = New-Object System.Drawing.Point(20, 245)
-$lblStatus.Size = New-Object System.Drawing.Size(300, 20)
+$lblStatus.Location = New-Object System.Drawing.Point(20, 210)
+$lblStatus.Size = New-Object System.Drawing.Size(300, 25)
 $lblStatus.Font = $fontEmoji
-$form.Controls.Add($lblStatus)
+$pnlMain.Controls.Add($lblStatus)
 
 # --- Run Button ---
 $btnRun = New-Object System.Windows.Forms.Button
 $btnRun.Text = "$e_rocket Start Organizing"
-$btnRun.Location = New-Object System.Drawing.Point(360, 250)
-$btnRun.Size = New-Object System.Drawing.Size(200, 40)
+$btnRun.Location = New-Object System.Drawing.Point(340, 220)
+$btnRun.Size = New-Object System.Drawing.Size(220, 50)
 $btnRun.Font = $fontEmojiBold
-$btnRun.BackColor = "LightGreen"
+$btnRun.BackColor = $c_btn_action
+$btnRun.ForeColor = $c_btn_text
 $btnRun.FlatStyle = "Flat"
-$form.Controls.Add($btnRun)
+$btnRun.FlatAppearance.BorderSize = 0
+$pnlMain.Controls.Add($btnRun)
 
 # --- Toggle Log Button ---
 $btnLog = New-Object System.Windows.Forms.Button
 $btnLog.Text = "Show Log $e_memo"
-$btnLog.Location = New-Object System.Drawing.Point(20, 270)
-$btnLog.Size = New-Object System.Drawing.Size(100, 25)
+$btnLog.Location = New-Object System.Drawing.Point(20, 245)
+$btnLog.Size = New-Object System.Drawing.Size(120, 25)
 $btnLog.Font = $fontEmoji
-$btnLog.FlatStyle = "Popup"
-$form.Controls.Add($btnLog)
+$btnLog.FlatStyle = "Flat"
+$btnLog.BackColor = [System.Drawing.Color]::White
+$pnlMain.Controls.Add($btnLog)
 
 # --- Output Log ---
 $txtLog = New-Object System.Windows.Forms.TextBox
-$txtLog.Location = New-Object System.Drawing.Point(20, 310)
+$txtLog.Location = New-Object System.Drawing.Point(20, 280)
 $txtLog.Size = New-Object System.Drawing.Size(540, 180)
 $txtLog.Multiline = $true
 $txtLog.ScrollBars = "Vertical"
 $txtLog.ReadOnly = $true
 $txtLog.Font = $fontLog
 $txtLog.BackColor = "White"
-$form.Controls.Add($txtLog)
+$pnlMain.Controls.Add($txtLog)
 
 # --- Animation Timer ---
 $timer = New-Object System.Windows.Forms.Timer
@@ -188,12 +216,14 @@ $timer.Add_Tick({
 $isLogVisible = $false
 $btnLog.Add_Click({
         if ($isLogVisible) {
-            $form.Height = 350
+            $form.Height = 400
+            $pnlMain.Size = New-Object System.Drawing.Size(600, 340)
             $btnLog.Text = "Show Log $e_memo"
             $isLogVisible = $false
         }
         else {
-            $form.Height = 550
+            $form.Height = 600
+            $pnlMain.Size = New-Object System.Drawing.Size(600, 540)
             $btnLog.Text = "Hide Log $e_monkey"
             $isLogVisible = $true
         }
@@ -201,6 +231,7 @@ $btnLog.Add_Click({
 
 $btnRun.Add_Click({
         $btnRun.Enabled = $false
+        $btnRun.BackColor = [System.Drawing.Color]::Gray
         $txtLog.Clear()
         $txtLog.AppendText("Starting...`r`n")
     
@@ -213,12 +244,12 @@ $btnRun.Add_Click({
         if (-not (Test-Path $scriptPath)) {
             [System.Windows.Forms.MessageBox]::Show("Could not find Organize-Recipes.ps1", "Error", "OK", "Error")
             $btnRun.Enabled = $true
+            $btnRun.BackColor = $c_btn_action
             $progressBar.MarqueeAnimationSpeed = 0
             $timer.Stop()
             return
         }
 
-        # Use a string for the command to avoid parsing issues with &
         $cmd = "& `"$scriptPath`" -SourcePath `"$($txtSource.Text)`" -DestinationPath `"$($txtDest.Text)`" -Mode `"$($cmbMode.SelectedItem)`" -Verbose *>&1"
         if ($chkNoRecurse.Checked) {
             $cmd += " -NoRecurse"
@@ -260,6 +291,7 @@ $btnRun.Add_Click({
         $lblStatus.Text = "Done! $e_party Bon Appétit!"
         $txtLog.AppendText("Done.`r`n")
         $btnRun.Enabled = $true
+        $btnRun.BackColor = $c_btn_action
     })
 
 # --- Show Form ---
