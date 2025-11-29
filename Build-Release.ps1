@@ -10,29 +10,30 @@ if (Test-Path $ReleaseDir) { Remove-Item $ReleaseDir -Recurse -Force }
 if (Test-Path $ZipPath) { Remove-Item $ZipPath -Force }
 New-Item -Path $ReleaseDir -ItemType Directory -Force | Out-Null
 
-# 2. Compile Launcher
-Write-Host "Compiling Launcher..." -ForegroundColor Cyan
-$csc = "C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe"
-if (-not (Test-Path $csc)) {
-    $csc = "C:\Windows\Microsoft.NET\Framework\v4.0.30319\csc.exe"
-}
+# 2. Build Standalone EXE
+Write-Host "Building Standalone EXE..." -ForegroundColor Cyan
+# We'll invoke the logic from Build-Standalone.ps1 here directly or call it.
+# For simplicity, let's call the existing Build-Standalone.ps1 but redirect output to Release dir
+& "$PSScriptRoot\Build-Standalone.ps1"
 
-if (Test-Path $csc) {
-    $LauncherSrc = Join-Path $ProjectRoot "Launcher.cs"
-    $LauncherExe = Join-Path $ReleaseDir "RecipeOrganizer.exe"
-    # Compile as WinExe (/target:winexe) to avoid console window
-    & $csc /target:winexe /out:"$LauncherExe" "$LauncherSrc"
+# Rename the standalone exe to the main name
+$StandaloneExe = Join-Path $ReleaseDir "RecipeOrganizer_Standalone.exe"
+$MainExe = Join-Path $ReleaseDir "RecipeOrganizer.exe"
+if (Test-Path $StandaloneExe) {
+    Move-Item $StandaloneExe $MainExe -Force
 }
 else {
-    Write-Warning "C# Compiler (csc.exe) not found. Skipping EXE generation."
+    Write-Error "Standalone EXE build failed."
 }
 
-# 3. Copy Artifacts
-Write-Host "Copying files..." -ForegroundColor Cyan
+# 3. Copy Only Essential Files
+Write-Host "Copying essential files..." -ForegroundColor Cyan
 Copy-Item (Join-Path $ProjectRoot "Organize-Recipes.ps1") $ReleaseDir
-Copy-Item (Join-Path $ProjectRoot "RecipeOrganizerGUI.ps1") $ReleaseDir
 Copy-Item (Join-Path $ProjectRoot "README.md") $ReleaseDir
 Copy-Item (Join-Path $ProjectRoot "CHANGELOG.md") $ReleaseDir
+
+# Remove intermediate artifacts if any (like the source .cs from standalone build)
+Remove-Item (Join-Path $ReleaseDir "StandaloneLauncher.cs") -ErrorAction SilentlyContinue
 
 # 4. Create Zip
 Write-Host "Creating Zip archive..." -ForegroundColor Cyan
@@ -41,3 +42,4 @@ Add-Type -AssemblyName System.IO.Compression.FileSystem
 
 Write-Host "Build Complete!" -ForegroundColor Green
 Write-Host "Release Zip: $ZipPath"
+Write-Host "Contents: RecipeOrganizer.exe (Standalone), Organize-Recipes.ps1, Docs"

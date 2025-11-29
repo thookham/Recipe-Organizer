@@ -39,7 +39,7 @@ param (
 
     [Parameter(Mandatory = $false)]
     [Alias("dst", "d")]
-    [string]$DestinationPath = "C:\Recipes",
+    [string]$DestinationPath = [System.IO.Path]::Combine([Environment]::GetFolderPath("MyDocuments"), "OrganizedRecipes"),
 
     [Parameter(Mandatory = $false)]
     [Alias("mod", "m")]
