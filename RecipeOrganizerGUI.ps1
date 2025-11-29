@@ -29,10 +29,12 @@ $form.MaximizeBox = $false
 $form.BackColor = [System.Drawing.Color]::WhiteSmoke
 
 # --- Fonts ---
-# Segoe UI Emoji is good for emojis, but standard Segoe UI usually falls back correctly on Win10+
-$fontTitle = New-Object System.Drawing.Font("Segoe UI", 12, [System.Drawing.FontStyle]::Bold)
+# Explicitly use Segoe UI Emoji for controls with emojis to ensure rendering
+$fontTitle = New-Object System.Drawing.Font("Segoe UI Emoji", 12, [System.Drawing.FontStyle]::Bold)
 $fontRegular = New-Object System.Drawing.Font("Segoe UI", 9)
 $fontBold = New-Object System.Drawing.Font("Segoe UI", 9, [System.Drawing.FontStyle]::Bold)
+$fontEmoji = New-Object System.Drawing.Font("Segoe UI Emoji", 9)
+$fontEmojiBold = New-Object System.Drawing.Font("Segoe UI Emoji", 9, [System.Drawing.FontStyle]::Bold)
 $fontLog = New-Object System.Drawing.Font("Consolas", 9)
 
 # --- Header ---
@@ -49,7 +51,7 @@ $lblSource = New-Object System.Windows.Forms.Label
 $lblSource.Text = "$e_folder Source Folder:"
 $lblSource.Location = New-Object System.Drawing.Point(20, 50)
 $lblSource.AutoSize = $true
-$lblSource.Font = $fontBold
+$lblSource.Font = $fontEmojiBold
 $form.Controls.Add($lblSource)
 
 $txtSource = New-Object System.Windows.Forms.TextBox
@@ -78,7 +80,7 @@ $lblDest = New-Object System.Windows.Forms.Label
 $lblDest.Text = "$e_target Destination Folder:"
 $lblDest.Location = New-Object System.Drawing.Point(20, 110)
 $lblDest.AutoSize = $true
-$lblDest.Font = $fontBold
+$lblDest.Font = $fontEmojiBold
 $form.Controls.Add($lblDest)
 
 $txtDest = New-Object System.Windows.Forms.TextBox
@@ -107,7 +109,7 @@ $lblMode = New-Object System.Windows.Forms.Label
 $lblMode.Text = "$e_gear Mode:"
 $lblMode.Location = New-Object System.Drawing.Point(20, 180)
 $lblMode.AutoSize = $true
-$lblMode.Font = $fontBold
+$lblMode.Font = $fontEmojiBold
 $form.Controls.Add($lblMode)
 
 $cmbMode = New-Object System.Windows.Forms.ComboBox
@@ -123,7 +125,7 @@ $chkNoRecurse = New-Object System.Windows.Forms.CheckBox
 $chkNoRecurse.Text = "$e_no Top folder only (No Recursion)"
 $chkNoRecurse.Location = New-Object System.Drawing.Point(220, 178)
 $chkNoRecurse.AutoSize = $true
-$chkNoRecurse.Font = $fontRegular
+$chkNoRecurse.Font = $fontEmoji
 $form.Controls.Add($chkNoRecurse)
 
 # --- Progress Bar ---
@@ -139,7 +141,7 @@ $lblStatus = New-Object System.Windows.Forms.Label
 $lblStatus.Text = "Ready to organize! $e_cooking"
 $lblStatus.Location = New-Object System.Drawing.Point(20, 245)
 $lblStatus.Size = New-Object System.Drawing.Size(300, 20)
-$lblStatus.Font = $fontRegular
+$lblStatus.Font = $fontEmoji
 $form.Controls.Add($lblStatus)
 
 # --- Run Button ---
@@ -147,7 +149,7 @@ $btnRun = New-Object System.Windows.Forms.Button
 $btnRun.Text = "$e_rocket Start Organizing"
 $btnRun.Location = New-Object System.Drawing.Point(360, 250)
 $btnRun.Size = New-Object System.Drawing.Size(200, 40)
-$btnRun.Font = $fontBold
+$btnRun.Font = $fontEmojiBold
 $btnRun.BackColor = "LightGreen"
 $btnRun.FlatStyle = "Flat"
 $form.Controls.Add($btnRun)
@@ -157,7 +159,7 @@ $btnLog = New-Object System.Windows.Forms.Button
 $btnLog.Text = "Show Log $e_memo"
 $btnLog.Location = New-Object System.Drawing.Point(20, 270)
 $btnLog.Size = New-Object System.Drawing.Size(100, 25)
-$btnLog.Font = $fontRegular
+$btnLog.Font = $fontEmoji
 $btnLog.FlatStyle = "Popup"
 $form.Controls.Add($btnLog)
 
