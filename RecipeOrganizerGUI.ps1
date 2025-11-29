@@ -1,24 +1,43 @@
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 
+# --- Emoji Helpers ---
+function Get-Emoji {
+    param ([int]$Code)
+    return [char]::ConvertFromUtf32($Code)
+}
+
+$e_cooking = Get-Emoji 0x1F373
+$e_salad = Get-Emoji 0x1F957
+$e_folder = Get-Emoji 0x1F4C2
+$e_target = Get-Emoji 0x1F3AF
+$e_gear = [char]0x2699
+$e_no = Get-Emoji 0x1F6AB
+$e_rocket = Get-Emoji 0x1F680
+$e_memo = Get-Emoji 0x1F4DD
+$e_monkey = Get-Emoji 0x1F648
+$e_party = Get-Emoji 0x1F389
+$e_pan = Get-Emoji 0x1F958
+
 # --- Form Setup ---
 $form = New-Object System.Windows.Forms.Form
-$form.Text = "🍳 Recipe Organizer"
-$form.Size = New-Object System.Drawing.Size(600, 350) # Initial size (Log hidden)
+$form.Text = "$e_cooking Recipe Organizer"
+$form.Size = New-Object System.Drawing.Size(600, 350)
 $form.StartPosition = "CenterScreen"
 $form.FormBorderStyle = "FixedDialog"
 $form.MaximizeBox = $false
 $form.BackColor = [System.Drawing.Color]::WhiteSmoke
 
 # --- Fonts ---
-$fontTitle = New-Object System.Drawing.Font("Segoe UI Emoji", 12, [System.Drawing.FontStyle]::Bold)
+# Segoe UI Emoji is good for emojis, but standard Segoe UI usually falls back correctly on Win10+
+$fontTitle = New-Object System.Drawing.Font("Segoe UI", 12, [System.Drawing.FontStyle]::Bold)
 $fontRegular = New-Object System.Drawing.Font("Segoe UI", 9)
 $fontBold = New-Object System.Drawing.Font("Segoe UI", 9, [System.Drawing.FontStyle]::Bold)
 $fontLog = New-Object System.Drawing.Font("Consolas", 9)
 
 # --- Header ---
 $lblHeader = New-Object System.Windows.Forms.Label
-$lblHeader.Text = "Organize Your Kitchen! 🥗"
+$lblHeader.Text = "Organize Your Kitchen! $e_salad"
 $lblHeader.Location = New-Object System.Drawing.Point(20, 10)
 $lblHeader.Size = New-Object System.Drawing.Size(560, 30)
 $lblHeader.Font = $fontTitle
@@ -27,7 +46,7 @@ $form.Controls.Add($lblHeader)
 
 # --- Source Path ---
 $lblSource = New-Object System.Windows.Forms.Label
-$lblSource.Text = "📂 Source Folder:"
+$lblSource.Text = "$e_folder Source Folder:"
 $lblSource.Location = New-Object System.Drawing.Point(20, 50)
 $lblSource.AutoSize = $true
 $lblSource.Font = $fontBold
@@ -56,7 +75,7 @@ $form.Controls.Add($btnSource)
 
 # --- Destination Path ---
 $lblDest = New-Object System.Windows.Forms.Label
-$lblDest.Text = "🎯 Destination Folder:"
+$lblDest.Text = "$e_target Destination Folder:"
 $lblDest.Location = New-Object System.Drawing.Point(20, 110)
 $lblDest.AutoSize = $true
 $lblDest.Font = $fontBold
@@ -85,7 +104,7 @@ $form.Controls.Add($btnDest)
 
 # --- Options ---
 $lblMode = New-Object System.Windows.Forms.Label
-$lblMode.Text = "⚙️ Mode:"
+$lblMode.Text = "$e_gear Mode:"
 $lblMode.Location = New-Object System.Drawing.Point(20, 180)
 $lblMode.AutoSize = $true
 $lblMode.Font = $fontBold
@@ -101,7 +120,7 @@ $cmbMode.Font = $fontRegular
 $form.Controls.Add($cmbMode)
 
 $chkNoRecurse = New-Object System.Windows.Forms.CheckBox
-$chkNoRecurse.Text = "🚫 Top folder only (No Recursion)"
+$chkNoRecurse.Text = "$e_no Top folder only (No Recursion)"
 $chkNoRecurse.Location = New-Object System.Drawing.Point(220, 178)
 $chkNoRecurse.AutoSize = $true
 $chkNoRecurse.Font = $fontRegular
@@ -111,13 +130,13 @@ $form.Controls.Add($chkNoRecurse)
 $progressBar = New-Object System.Windows.Forms.ProgressBar
 $progressBar.Location = New-Object System.Drawing.Point(20, 220)
 $progressBar.Size = New-Object System.Drawing.Size(540, 20)
-$progressBar.Style = "Marquee" # Indeterminate animation
-$progressBar.MarqueeAnimationSpeed = 0 # Stopped initially
+$progressBar.Style = "Marquee"
+$progressBar.MarqueeAnimationSpeed = 0
 $form.Controls.Add($progressBar)
 
 # --- Status Label ---
 $lblStatus = New-Object System.Windows.Forms.Label
-$lblStatus.Text = "Ready to organize! 👨‍🍳"
+$lblStatus.Text = "Ready to organize! $e_cooking"
 $lblStatus.Location = New-Object System.Drawing.Point(20, 245)
 $lblStatus.Size = New-Object System.Drawing.Size(300, 20)
 $lblStatus.Font = $fontRegular
@@ -125,7 +144,7 @@ $form.Controls.Add($lblStatus)
 
 # --- Run Button ---
 $btnRun = New-Object System.Windows.Forms.Button
-$btnRun.Text = "🚀 Start Organizing"
+$btnRun.Text = "$e_rocket Start Organizing"
 $btnRun.Location = New-Object System.Drawing.Point(360, 250)
 $btnRun.Size = New-Object System.Drawing.Size(200, 40)
 $btnRun.Font = $fontBold
@@ -135,14 +154,14 @@ $form.Controls.Add($btnRun)
 
 # --- Toggle Log Button ---
 $btnLog = New-Object System.Windows.Forms.Button
-$btnLog.Text = "Show Log 📝"
+$btnLog.Text = "Show Log $e_memo"
 $btnLog.Location = New-Object System.Drawing.Point(20, 270)
 $btnLog.Size = New-Object System.Drawing.Size(100, 25)
 $btnLog.Font = $fontRegular
 $btnLog.FlatStyle = "Popup"
 $form.Controls.Add($btnLog)
 
-# --- Output Log (Hidden by default) ---
+# --- Output Log ---
 $txtLog = New-Object System.Windows.Forms.TextBox
 $txtLog.Location = New-Object System.Drawing.Point(20, 310)
 $txtLog.Size = New-Object System.Drawing.Size(540, 180)
@@ -160,21 +179,20 @@ $dotCount = 0
 $timer.Add_Tick({
         $dotCount = ($dotCount + 1) % 4
         $dots = "." * $dotCount
-        $lblStatus.Text = "Working$dots 🥘"
+        $lblStatus.Text = "Working$dots $e_pan"
     })
 
 # --- Event Handlers ---
-
 $isLogVisible = $false
 $btnLog.Add_Click({
         if ($isLogVisible) {
             $form.Height = 350
-            $btnLog.Text = "Show Log 📝"
+            $btnLog.Text = "Show Log $e_memo"
             $isLogVisible = $false
         }
         else {
             $form.Height = 550
-            $btnLog.Text = "Hide Log 🙈"
+            $btnLog.Text = "Hide Log $e_monkey"
             $isLogVisible = $true
         }
     })
@@ -184,10 +202,8 @@ $btnRun.Add_Click({
         $txtLog.Clear()
         $txtLog.AppendText("Starting...`r`n")
     
-        # Start Animation
         $progressBar.MarqueeAnimationSpeed = 30
         $timer.Start()
-    
         $form.Refresh()
 
         $scriptPath = Join-Path -Path $PSScriptRoot -ChildPath "Organize-Recipes.ps1"
@@ -200,8 +216,8 @@ $btnRun.Add_Click({
             return
         }
 
-        # Construct Command with Verbose redirection
-        $cmd = "& '$scriptPath' -SourcePath '$($txtSource.Text)' -DestinationPath '$($txtDest.Text)' -Mode '$($cmbMode.SelectedItem)' -Verbose *>&1"
+        # Use a string for the command to avoid parsing issues with &
+        $cmd = "& `"$scriptPath`" -SourcePath `"$($txtSource.Text)`" -DestinationPath `"$($txtDest.Text)`" -Mode `"$($cmbMode.SelectedItem)`" -Verbose *>&1"
         if ($chkNoRecurse.Checked) {
             $cmd += " -NoRecurse"
         }
@@ -234,18 +250,14 @@ $btnRun.Add_Click({
         $err = $p.StandardError.ReadToEnd()
         if ($err) { $txtLog.AppendText("ERROR: $err`r`n") }
 
-        # Stop Animation
         $timer.Stop()
         $progressBar.MarqueeAnimationSpeed = 0
-        $progressBar.Value = 100 # Fill it up to show done
+        $progressBar.Value = 100
         $progressBar.Style = "Blocks"
     
-        $lblStatus.Text = "Done! 🎉 Bon Appétit!"
+        $lblStatus.Text = "Done! $e_party Bon Appétit!"
         $txtLog.AppendText("Done.`r`n")
         $btnRun.Enabled = $true
-    
-        # Reset progress bar style for next run after a delay? 
-        # For now, just leave it full.
     })
 
 # --- Show Form ---
