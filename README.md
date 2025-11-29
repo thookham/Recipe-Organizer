@@ -20,10 +20,14 @@ A powerful tool to identify, organize, and centralize your recipe files. 🥘
 
 ### 🖥️ Graphical Interface (Recommended)
 Double-click `RecipeOrganizer.exe` to launch the easy-to-use interface.
+- **Modern Design**: Clean layout with a colorful header and emojis 🍳.
+- **Easy Controls**: Browse for folders, select modes, and toggle recursion with checkboxes.
+- **Feedback**: Watch the animated progress bar and view detailed logs if needed.
+
 1.  Select your **Source Folder** (where your messy files are).
 2.  Select your **Destination Folder** (where you want them organized).
 3.  Choose a **Mode** (Start with 'Test'!).
-4.  Click **Start Organizer**.
+4.  Click **Start Organizing**.
 
 ### ⌨️ Command Line (Advanced)
 You can run the PowerShell script directly:
