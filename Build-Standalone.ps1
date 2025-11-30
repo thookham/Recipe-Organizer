@@ -2,78 +2,151 @@
 $ErrorActionPreference = "Stop"
 
 $ProjectRoot = $PSScriptRoot
+# Build-Standalone.ps1
+$ErrorActionPreference = "Stop"
+
+$ProjectRoot = $PSScriptRoot
+$ReleaseDir = Join-Path $ProjectRoot "Release"
+# Build-Standalone.ps1
+$ErrorActionPreference = "Stop"
+
+$ProjectRoot = $PSScriptRoot
+# Build-Standalone.ps1
+$ErrorActionPreference = "Stop"
+
+$ProjectRoot = $PSScriptRoot
 $ReleaseDir = Join-Path $ProjectRoot "Release"
 if (-not (Test-Path $ReleaseDir)) { New-Item -Path $ReleaseDir -ItemType Directory -Force | Out-Null }
 
 $ScriptPath = Join-Path $ProjectRoot "Organize-Recipes.ps1"
 $GuiPath = Join-Path $ProjectRoot "RecipeOrganizerGUI.ps1"
 
-# Prepare Resources (Base64 Encoded to ensure integrity)
-function Create-ResourceFile {
-    param($SourcePath, $DestPath)
-    $bytes = [System.IO.File]::ReadAllBytes($SourcePath)
-    $base64 = [Convert]::ToBase64String($bytes)
-    [System.IO.File]::WriteAllText($DestPath, $base64)
+# Path to System.Management.Automation.dll
+# We need to copy this to the release dir to embed it easily
+$RefAssemblySource = "C:\Windows\Microsoft.NET\assembly\GAC_MSIL\System.Management.Automation\v4.0_3.0.0.0__31bf3856ad364e35\System.Management.Automation.dll"
+$RefAssemblyDest = Join-Path $ReleaseDir "System.Management.Automation.dll"
+
+if (Test-Path $RefAssemblySource) {
+    Copy-Item -Path $RefAssemblySource -Destination $RefAssemblyDest -Force
+}
+else {
+    Write-Error "Could not find System.Management.Automation.dll at $RefAssemblySource"
 }
 
+# Prepare Resources
+# 1. Wrap Organize-Recipes.ps1 in a function "Invoke-OrganizeRecipes"
+$RawScript = Get-Content $ScriptPath -Raw
+# We need to ensure the wrapper handles the parameters correctly.
+# Best way: function Invoke-OrganizeRecipes { [CmdletBinding()] param(...) <script> }
+# But the script already has param(). We can just wrap it.
+$WrappedScript = "function Global:Invoke-OrganizeRecipes { `r`n $RawScript `r`n }"
 $ScriptResFile = Join-Path $ReleaseDir "script.b64"
+[System.IO.File]::WriteAllText($ScriptResFile, [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($WrappedScript)))
+
+# 2. GUI Script (No changes needed, just encode)
 $GuiResFile = Join-Path $ReleaseDir "gui.b64"
+$GuiBytes = [System.IO.File]::ReadAllBytes($GuiPath)
+[System.IO.File]::WriteAllText($GuiResFile, [Convert]::ToBase64String($GuiBytes))
 
-Create-ResourceFile $ScriptPath $ScriptResFile
-Create-ResourceFile $GuiPath $GuiResFile
-
-# C# Source Code
+# C# Source Code (Hosted PowerShell with Embedded DLL)
 $CSharpCode = @"
 using System;
-using System.Diagnostics;
-using System.IO;
 using System.Reflection;
-using System.Text;
-using System.Windows.Forms; // Requires /reference:System.Windows.Forms.dll
+using System.IO;
+using System.Windows.Forms;
 
 class Program {
     [STAThread]
-    static void Main() {
+    static void Main(string[] args) {
         try {
-            // Create a unique temp directory
-            string tempDir = Path.Combine(Path.GetTempPath(), "RecipeOrganizer_" + Guid.NewGuid().ToString("N"));
-            Directory.CreateDirectory(tempDir);
-
-            // Extract Resources
-            string scriptContent = ReadResource("Script");
-            string guiContent = ReadResource("Gui");
-
-            string scriptPath = Path.Combine(tempDir, "Organize-Recipes.ps1");
-            string guiPath = Path.Combine(tempDir, "RecipeOrganizerGUI.ps1");
-
-            // Decode and Write scripts to temp
-            File.WriteAllBytes(scriptPath, Convert.FromBase64String(scriptContent));
-            File.WriteAllBytes(guiPath, Convert.FromBase64String(guiContent));
-
-            // Launch GUI
-            ProcessStartInfo psi = new ProcessStartInfo();
-            psi.FileName = "powershell.exe";
-            // -WindowStyle Hidden to hide the console window of the PowerShell process itself
-            psi.Arguments = "-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File \"" + guiPath + "\"";
-            psi.WindowStyle = ProcessWindowStyle.Hidden;
-            psi.UseShellExecute = false;
-            psi.CreateNoWindow = true;
-
-            Process p = Process.Start(psi);
-            if (p == null) {
-                throw new Exception("Failed to start PowerShell process.");
-            }
-            p.WaitForExit();
-
-            // Cleanup
-            try {
-                if (Directory.Exists(tempDir)) {
-                    Directory.Delete(tempDir, true);
+            File.WriteAllText("launcher_debug.txt", "Main Started\nArgs: " + string.Join(" ", args) + "\n");
+            
+            // 1. Setup Assembly Resolver for Embedded DLLs (System.Management.Automation)
+            AppDomain.CurrentDomain.AssemblyResolve += (sender, resolveArgs) => {
+                File.AppendAllText("launcher_debug.txt", "Resolving: " + resolveArgs.Name + "\n");
+                string resourceName = new AssemblyName(resolveArgs.Name).Name + ".dll";
+                using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName)) {
+                    if (stream == null) {
+                        File.AppendAllText("launcher_debug.txt", "Resource NOT found: " + resourceName + "\n");
+                        return null;
+                    }
+                    File.AppendAllText("launcher_debug.txt", "Resource found: " + resourceName + "\n");
+                    byte[] assemblyData = new byte[stream.Length];
+                    stream.Read(assemblyData, 0, assemblyData.Length);
+                    return Assembly.Load(assemblyData);
                 }
-            } catch { }
+            };
+
+            // 2. Run Application Logic
+            RunApp(args);
+        } catch (Exception ex) {
+            File.AppendAllText("launcher_debug.txt", "Main Exception: " + ex.ToString() + "\n");
+            MessageBox.Show("Critical Error: " + ex.Message);
+        }
+    }
+
+    static void RunApp(string[] args) {
+        try {
+            File.AppendAllText("launcher_debug.txt", "RunApp Started\n");
+            PowerShellRunner.Run(args);
+            File.AppendAllText("launcher_debug.txt", "RunApp Finished\n");
         }
         catch (Exception ex) {
-            MessageBox.Show("An error occurred launching the application:\n" + ex.Message, "Recipe Organizer Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            File.AppendAllText("launcher_debug.txt", "RunApp Exception: " + ex.ToString() + "\n");
+            MessageBox.Show("Critical Error: " + ex.Message, "Recipe Organizer", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+    }
+}
+
+// Helper class to force JIT compilation only when called
+public static class PowerShellRunner {
+    public static void Run(string[] args) {
+        // Now we can use System.Management.Automation types
+        // The AssemblyResolve event will fire when this method is JIT-compiled/executed
+        
+        using (var runspace = System.Management.Automation.Runspaces.RunspaceFactory.CreateRunspace()) {
+            runspace.Open();
+            
+            // Load Embedded Script (The Function Wrapper)
+            string scriptContent = DecodeResource("Script");
+            using (var ps = System.Management.Automation.PowerShell.Create()) {
+                ps.Runspace = runspace;
+                ps.AddScript(scriptContent);
+                ps.Invoke(); // Defines the function 'Invoke-OrganizeRecipes'
+            }
+
+            // Load and Run GUI
+            string guiContent = DecodeResource("Gui");
+            using (var ps = System.Management.Automation.PowerShell.Create()) {
+                ps.Runspace = runspace;
+                ps.AddScript(guiContent);
+                
+                // Parse and pass arguments
+                // Simple parser: -Name Value switch
+                for (int i = 0; i < args.Length; i++) {
+                    string arg = args[i];
+                    if (arg.StartsWith("-")) {
+                        string paramName = arg.Substring(1);
+                        if (i + 1 < args.Length && !args[i+1].StartsWith("-")) {
+                            ps.AddParameter(paramName, args[i+1]);
+                            i++;
+                        } else {
+                            ps.AddParameter(paramName, true); // Switch
+                        }
+                    }
+                }
+
+                ps.Invoke();
+
+                if (ps.HadErrors) {
+                    File.AppendAllText("launcher_debug.txt", "PowerShell Errors:\n");
+                    foreach (var err in ps.Streams.Error) {
+                        File.AppendAllText("launcher_debug.txt", err.ToString() + "\n");
+                    }
+                }
+            }
+            
+            runspace.Close();
         }
     }
 
@@ -86,11 +159,17 @@ class Program {
             }
         }
     }
+
+    static string DecodeResource(string name) {
+        string base64 = ReadResource(name);
+        byte[] bytes = Convert.FromBase64String(base64);
+        return System.Text.Encoding.UTF8.GetString(bytes);
+    }
 }
 "@
 
 $SourceFile = Join-Path $ReleaseDir "StandaloneLauncher.cs"
-$ExeFile = Join-Path $ReleaseDir "RecipeOrganizer_Standalone.exe"
+$ExeFile = Join-Path $ReleaseDir "RecipeOrganizer.exe" # Renamed to cleaner name
 $ManifestFile = Join-Path $ReleaseDir "app.manifest"
 
 Set-Content -Path $SourceFile -Value $CSharpCode
@@ -118,14 +197,16 @@ if (-not (Test-Path $csc)) {
 }
 
 if (Test-Path $csc) {
-    Write-Host "Compiling Standalone EXE..." -ForegroundColor Cyan
+    Write-Host "Compiling Standalone EXE (Embedded Dependencies)..." -ForegroundColor Cyan
     # Use Start-Process to ensure arguments are passed correctly without PowerShell parsing interference
     $ArgList = @(
         "/target:winexe",
         "/win32manifest:`"$ManifestFile`"",
         "/reference:System.Windows.Forms.dll",
+        "/reference:`"$RefAssemblyDest`"",
         "/resource:`"$ScriptResFile`",Script",
         "/resource:`"$GuiResFile`",Gui",
+        "/resource:`"$RefAssemblyDest`",System.Management.Automation.dll",
         "/out:`"$ExeFile`"",
         "`"$SourceFile`""
     )
@@ -134,6 +215,8 @@ if (Test-Path $csc) {
     
     if ($p.ExitCode -eq 0) {
         Write-Host "Created: $ExeFile" -ForegroundColor Green
+        # Cleanup DLL from release folder so it's not zipped (it's inside the EXE now)
+        Remove-Item $RefAssemblyDest -Force
     }
     else {
         Write-Error "Compilation Failed! Exit Code: $($p.ExitCode)"

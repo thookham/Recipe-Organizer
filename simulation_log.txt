@@ -1,0 +1,21 @@
+DEBUG: Starting Hosted Mode
+DEBUG: Runspace Created
+DEBUG: Function Injected
+DEBUG: Parameters Added
+DEBUG: Async Invoke Started
+DEBUG: Starting Hosted Mode
+DEBUG: Runspace Created
+DEBUG: Function Injected
+DEBUG: Parameters Added
+DEBUG: Async Invoke Started
+DEBUG: Starting Hosted Mode
+DEBUG: Function Definition Length: 10147
+DEBUG: Runspace Created
+DEBUG: Function Injected
+DEBUG: Parameters Added
+DEBUG: Async Invoke Started
+DEBUG: Starting Hosted Mode
+DEBUG: Function Definition Length: 10147
+DEBUG: Runspace Created
+DEBUG: Function Injected
+DEBUG: Parameters Added

@@ -1,5 +1,11 @@
 # Changelog
 
+## [v1.0.1] - 2025-11-29
+### Fixed
+- **Simulation Hang**: Resolved an issue where the simulation would hang due to incorrect async invocation.
+- **GUI Layout**: Log window is now hidden by default to reduce clutter.
+- **Stream Capturing**: Improved capturing of Verbose and Information streams in the GUI log.
+
 ## [v1.0.0] - 2025-11-29
 ### Added
 - **Standalone Executable**: `RecipeOrganizer.exe` is now a self-contained application. No need to install PowerShell dependencies manually.

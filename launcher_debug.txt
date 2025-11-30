@@ -1,0 +1,83 @@
+Main Started
+Args: -SourcePath C:\Users\thook\Documents\Antigravity\Recipe Finder\EdgeCases -DestinationPath C:\Users\thook\Documents\Antigravity\Recipe Finder\SimulationOutput -Mode Copy -AutoRun
+RunApp Started
+Resolving: System.Management.Automation.resources, Version=3.0.0.0, Culture=en-US, PublicKeyToken=31bf3856ad364e35
+Resource NOT found: System.Management.Automation.resources.dll
+Resolving: System.Management.Automation.resources, Version=3.0.0.0, Culture=en-US, PublicKeyToken=31bf3856ad364e35
+Resource NOT found: System.Management.Automation.resources.dll
+Resolving: System.Management.Automation.resources, Version=3.0.0.0, Culture=en-US, PublicKeyToken=31bf3856ad364e35
+Resource NOT found: System.Management.Automation.resources.dll
+Resolving: System.Management.Automation.resources, Version=3.0.0.0, Culture=en-US, PublicKeyToken=31bf3856ad364e35
+Resource NOT found: System.Management.Automation.resources.dll
+Resolving: System.Management.Automation.resources, Version=3.0.0.0, Culture=en-US, PublicKeyToken=31bf3856ad364e35
+Resource NOT found: System.Management.Automation.resources.dll
+Resolving: System.Management.Automation.resources, Version=3.0.0.0, Culture=en-US, PublicKeyToken=31bf3856ad364e35
+Resource NOT found: System.Management.Automation.resources.dll
+Resolving: System.Management.Automation.resources, Version=3.0.0.0, Culture=en-US, PublicKeyToken=31bf3856ad364e35
+Resource NOT found: System.Management.Automation.resources.dll
+Resolving: System.Management.Automation.resources, Version=3.0.0.0, Culture=en-US, PublicKeyToken=31bf3856ad364e35
+Resource NOT found: System.Management.Automation.resources.dll
+Resolving: System.Management.Automation.resources, Version=3.0.0.0, Culture=en-US, PublicKeyToken=31bf3856ad364e35
+Resource NOT found: System.Management.Automation.resources.dll
+Resolving: System.Management.Automation.resources, Version=3.0.0.0, Culture=en-US, PublicKeyToken=31bf3856ad364e35
+Resource NOT found: System.Management.Automation.resources.dll
+Resolving: System.Management.Automation.resources, Version=3.0.0.0, Culture=en-US, PublicKeyToken=31bf3856ad364e35
+Resource NOT found: System.Management.Automation.resources.dll
+Resolving: System.Management.Automation.resources, Version=3.0.0.0, Culture=en-US, PublicKeyToken=31bf3856ad364e35
+Resource NOT found: System.Management.Automation.resources.dll
+Resolving: System.Management.Automation.resources, Version=3.0.0.0, Culture=en-US, PublicKeyToken=31bf3856ad364e35
+Resource NOT found: System.Management.Automation.resources.dll
+Resolving: System.Management.Automation.resources, Version=3.0.0.0, Culture=en-US, PublicKeyToken=31bf3856ad364e35
+Resource NOT found: System.Management.Automation.resources.dll
+Resolving: System.Management.Automation.resources, Version=3.0.0.0, Culture=en-US, PublicKeyToken=31bf3856ad364e35
+Resource NOT found: System.Management.Automation.resources.dll
+Resolving: System.Management.Automation.resources, Version=3.0.0.0, Culture=en-US, PublicKeyToken=31bf3856ad364e35
+Resource NOT found: System.Management.Automation.resources.dll
+Resolving: System.Management.Automation.resources, Version=3.0.0.0, Culture=en-US, PublicKeyToken=31bf3856ad364e35
+Resource NOT found: System.Management.Automation.resources.dll
+Resolving: System.Management.Automation.resources, Version=3.0.0.0, Culture=en-US, PublicKeyToken=31bf3856ad364e35
+Resource NOT found: System.Management.Automation.resources.dll
+Resolving: Microsoft.PowerShell.Security.resources, Version=3.0.0.0, Culture=en-US, PublicKeyToken=31bf3856ad364e35
+Resource NOT found: Microsoft.PowerShell.Security.resources.dll
+Resolving: Microsoft.PowerShell.Security.resources, Version=3.0.0.0, Culture=en-US, PublicKeyToken=31bf3856ad364e35
+Resource NOT found: Microsoft.PowerShell.Security.resources.dll
+Resolving: Microsoft.WSMan.Management.resources, Version=3.0.0.0, Culture=en-US, PublicKeyToken=31bf3856ad364e35
+Resource NOT found: Microsoft.WSMan.Management.resources.dll
+Resolving: Microsoft.WSMan.Management.resources, Version=3.0.0.0, Culture=en-US, PublicKeyToken=31bf3856ad364e35
+Resource NOT found: Microsoft.WSMan.Management.resources.dll
+Resolving: System.Management.Automation.resources, Version=3.0.0.0, Culture=en-US, PublicKeyToken=31bf3856ad364e35
+Resource NOT found: System.Management.Automation.resources.dll
+Resolving: System.Management.Automation.resources, Version=3.0.0.0, Culture=en-US, PublicKeyToken=31bf3856ad364e35
+Resource NOT found: System.Management.Automation.resources.dll
+Resolving: System.Management.Automation.resources, Version=3.0.0.0, Culture=en-US, PublicKeyToken=31bf3856ad364e35
+Resource NOT found: System.Management.Automation.resources.dll
+Resolving: System.Management.Automation.resources, Version=3.0.0.0, Culture=en-US, PublicKeyToken=31bf3856ad364e35
+Resource NOT found: System.Management.Automation.resources.dll
+Resolving: System.Management.Automation.resources, Version=3.0.0.0, Culture=en-US, PublicKeyToken=31bf3856ad364e35
+Resource NOT found: System.Management.Automation.resources.dll
+Resolving: System.Management.Automation.resources, Version=3.0.0.0, Culture=en-US, PublicKeyToken=31bf3856ad364e35
+Resource NOT found: System.Management.Automation.resources.dll
+Resolving: System.Management.Automation.resources, Version=3.0.0.0, Culture=en-US, PublicKeyToken=31bf3856ad364e35
+Resource NOT found: System.Management.Automation.resources.dll
+Resolving: System.Management.Automation.resources, Version=3.0.0.0, Culture=en-US, PublicKeyToken=31bf3856ad364e35
+Resource NOT found: System.Management.Automation.resources.dll
+Resolving: System.Windows.Forms
+Resource NOT found: System.Windows.Forms.dll
+Resolving: System.Management.Automation.resources, Version=3.0.0.0, Culture=en-US, PublicKeyToken=31bf3856ad364e35
+Resource NOT found: System.Management.Automation.resources.dll
+Resolving: System.Management.Automation.resources, Version=3.0.0.0, Culture=en-US, PublicKeyToken=31bf3856ad364e35
+Resource NOT found: System.Management.Automation.resources.dll
+Resolving: System.Drawing
+Resource NOT found: System.Drawing.dll
+Resolving: Microsoft.PowerShell.Commands.Management.resources, Version=3.0.0.0, Culture=en-US, PublicKeyToken=31bf3856ad364e35
+Resource NOT found: Microsoft.PowerShell.Commands.Management.resources.dll
+Resolving: Microsoft.PowerShell.Commands.Management.resources, Version=3.0.0.0, Culture=en-US, PublicKeyToken=31bf3856ad364e35
+Resource NOT found: Microsoft.PowerShell.Commands.Management.resources.dll
+Resolving: Microsoft.WSMan.Management.resources, Version=3.0.0.0, Culture=en-US, PublicKeyToken=31bf3856ad364e35
+Resource NOT found: Microsoft.WSMan.Management.resources.dll
+Resolving: Microsoft.WSMan.Management.resources, Version=3.0.0.0, Culture=en-US, PublicKeyToken=31bf3856ad364e35
+Resource NOT found: Microsoft.WSMan.Management.resources.dll
+Resolving: System.Management.Automation.resources, Version=3.0.0.0, Culture=en-US, PublicKeyToken=31bf3856ad364e35
+Resource NOT found: System.Management.Automation.resources.dll
+Resolving: System.Management.Automation.resources, Version=3.0.0.0, Culture=en-US, PublicKeyToken=31bf3856ad364e35
+Resource NOT found: System.Management.Automation.resources.dll

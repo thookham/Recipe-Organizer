@@ -17,13 +17,18 @@ Write-Host "Building Standalone EXE..." -ForegroundColor Cyan
 & "$PSScriptRoot\Build-Standalone.ps1"
 
 # Rename the standalone exe to the main name
-$StandaloneExe = Join-Path $ReleaseDir "RecipeOrganizer_Standalone.exe"
+# Rename the standalone exe to the main name (if needed, but Build-Standalone now outputs RecipeOrganizer.exe directly)
 $MainExe = Join-Path $ReleaseDir "RecipeOrganizer.exe"
-if (Test-Path $StandaloneExe) {
-    Move-Item $StandaloneExe $MainExe -Force
-}
-else {
-    Write-Error "Standalone EXE build failed."
+
+if (-not (Test-Path $MainExe)) {
+    # Fallback check for old name just in case
+    $StandaloneExe = Join-Path $ReleaseDir "RecipeOrganizer_Standalone.exe"
+    if (Test-Path $StandaloneExe) {
+        Move-Item $StandaloneExe $MainExe -Force
+    }
+    else {
+        Write-Error "Standalone EXE build failed. Could not find $MainExe"
+    }
 }
 
 # 3. Copy Only Essential Files
