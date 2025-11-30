@@ -57,17 +57,5 @@ If you see this error, you need to allow script execution. Run PowerShell as Adm
 ```powershell
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 ```
-
-### "Files not found"
-- Ensure the files contain one of the keywords (e.g., "Ingredients").
-- If the file is an image (TIFF) or PDF without text, ensure the filename contains "Recipe".
-- Check if the file is in a subfolder and you used `-NoRecurse`.
-
-### "Access Denied"
-- Ensure you have permission to read the source files and write to the destination folder.
-- Close any open Word documents before running the script.
-
-## 📋 Requirements
-- Windows 10/11
 - .NET Framework 4.5+ (Standard on modern Windows)
 - PowerShell 5.1 or later

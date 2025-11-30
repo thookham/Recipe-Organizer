@@ -7,6 +7,15 @@ Core file organization with GUI, keyword detection, and standalone executable.
 
 ## 🚧 Version 2.0 - Smart Management (Current Focus)
 
+### Phase 0: Developer Experience & Distribution
+**Goal**: Make the tool easier to distribute and trust
+
+- [ ] **Code Signing**
+  - [ ] Acquire code signing certificate (EV or OV certificate)
+  - [ ] Sign `RecipeOrganizer.exe` with certificate
+  - [ ] Test SmartScreen bypass (signed executables don't trigger warnings)
+  - [ ] Document certificate renewal process
+
 ### Phase 1: Data Integrity & Cleanup
 **Goal**: Help users clean up messy recipe collections
 
