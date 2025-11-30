@@ -1,5 +1,12 @@
 # Changelog
 
+## [v1.0.2] - 2025-11-29
+### Fixed
+- **GUI Logic**: Fixed a critical bug where the execution logic was tied to the animation timer, causing infinite loops and silent failures.
+- **Log Toggle**: Fixed the "Show/Hide Log" button to correctly resize the window and toggle visibility.
+- **Run Button**: "Run" button now dynamically updates text based on the selected mode (Test, Copy, Move).
+- **Simulation**: Added robust debug logging to `simulation_log.txt` for easier troubleshooting.
+
 ## [v1.0.1] - 2025-11-29
 ### Fixed
 - **Simulation Hang**: Resolved an issue where the simulation would hang due to incorrect async invocation.

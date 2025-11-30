@@ -36,6 +36,9 @@ param (
     [Parameter(Mandatory = $false)]
     [Alias("src", "s")]
     [string]$SourcePath = [Environment]::GetFolderPath("MyDocuments"),
+    
+    # DEBUG MARKER
+    [string]$DebugMarker = $(Write-Host "DEBUG: Organize-Recipes STARTED with Source: $SourcePath Dest: $DestinationPath" -ForegroundColor Magenta),
 
     [Parameter(Mandatory = $false)]
     [Alias("dst", "d")]

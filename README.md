@@ -7,7 +7,7 @@ A powerful tool to identify, organize, and centralize your recipe files. 🥘
 - **📄 Format Support**: Works with `.docx`, `.doc`, `.pdf`, `.txt`, `.tiff`, and `.zip` files.
 - **📂 Organization**: Automatically sorts recipes into A-Z folders based on filename.
 - **Easy Controls**: Browse for folders, select modes, and toggle recursion with checkboxes.
-- **📝 Log View**: Toggleable log window to see detailed progress and debug information.
+- **📝 Log View**: Toggleable "Show/Hide Log" button to view detailed progress or keep the interface clean.
 - **Feedback**: Watch the animated progress bar and view detailed logs if needed.
 
 1.  Select your **Source Folder** (where your messy files are).

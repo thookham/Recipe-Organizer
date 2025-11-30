@@ -7,6 +7,10 @@ if (-not (Test-Path $ExePath)) {
 }
 
 # 1. Generate Edge Cases
+$SimulationLog = "$PSScriptRoot\simulation_log.txt"
+if (Test-Path $SimulationLog) { Remove-Item $SimulationLog -Force }
+New-Item -Path $SimulationLog -ItemType File -Force | Out-Null
+
 Write-Host "Generating Edge Cases..." -ForegroundColor Cyan
 & "$PSScriptRoot\Generate-EdgeCases.ps1"
 
