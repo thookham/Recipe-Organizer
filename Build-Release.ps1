@@ -34,6 +34,7 @@ if (-not (Test-Path $MainExe)) {
 # 3. Copy Only Essential Files
 Write-Host "Copying essential files..." -ForegroundColor Cyan
 Copy-Item (Join-Path $ProjectRoot "Organize-Recipes.ps1") $ReleaseDir
+Copy-Item (Join-Path $ProjectRoot "RecipeOrganizerGUI.ps1") $ReleaseDir
 Copy-Item (Join-Path $ProjectRoot "README.md") $ReleaseDir
 Copy-Item (Join-Path $ProjectRoot "CHANGELOG.md") $ReleaseDir
 
@@ -47,4 +48,5 @@ Add-Type -AssemblyName System.IO.Compression.FileSystem
 
 Write-Host "Build Complete!" -ForegroundColor Green
 Write-Host "Release Zip: $ZipPath"
-Write-Host "Contents: RecipeOrganizer.exe (Standalone), Organize-Recipes.ps1, Docs"
+Write-Host "Standalone EXE: $MainExe"
+Write-Host "Contents: RecipeOrganizer.exe, Organize-Recipes.ps1, RecipeOrganizerGUI.ps1, Docs"
