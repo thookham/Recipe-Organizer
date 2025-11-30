@@ -3,7 +3,7 @@ $ErrorActionPreference = "Stop"
 
 $ProjectRoot = $PSScriptRoot
 $ReleaseDir = Join-Path $ProjectRoot "Release"
-$ZipPath = Join-Path $ProjectRoot "RecipeOrganizer_v1.0.0.zip"
+$ZipPath = Join-Path $ProjectRoot "RecipeOrganizer_v1.0.2.zip"
 
 # 1. Clean up
 if (Test-Path $ReleaseDir) { Remove-Item $ReleaseDir -Recurse -Force }
