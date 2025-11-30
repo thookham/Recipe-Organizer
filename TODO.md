@@ -1,39 +1,27 @@
-# 🗺️ Project Roadmap & TODO
+# 📝 Project To-Do List
 
-## Version 2.0: Smart Recipe Manager (Next Up)
+## Version 2.0: Smart Recipe Manager
 
-### 1. 🧹 Duplicate Detection (Priority: High)
-- [ ] **Exact Duplicates**: Use SHA256 file hashing to find identical files.
-- [ ] **Content Duplicates**: Use fuzzy string matching (Levenshtein distance) to find the same recipe saved in different formats (e.g., `.docx` vs `.pdf`).
-- [ ] **Action**: Prompt user to keep the best version or archive duplicates.
+### 🧹 Duplicate Detection
+- [ ] **Implement SHA256 Hash Comparison**: Detect exact duplicates by file content.
+- [ ] **Implement Fuzzy Filename Matching**: Detect similar filenames (e.g., "Pie.txt" vs "Pie_v2.txt").
+- [ ] **Duplicates Folder**: Logic to safely move identified duplicates to a separate folder for review.
 
-### 2. 👁️ Optical Character Recognition (OCR)
-- [ ] **Integration**: Implement `Windows.Media.Ocr` (via PowerShell/C# reflection).
-- [ ] **Benefit**: Enable searching text within images (`.jpg`, `.png`, `.tiff`) and scanned PDFs.
+### 👁️ OCR Integration (Optical Character Recognition)
+- [ ] **Research WinRT API**: Investigate using `Windows.Media.Ocr` via PowerShell reflection.
+- [ ] **Create `Invoke-OCR`**: Helper function to extract text from images (`.jpg`, `.png`, `.tiff`).
+- [ ] **Verify OCR**: Test extraction quality on sample recipe images.
 
-### 3. 🗃️ Structured Data & Database
-- [ ] **Storage**: Implement `recipes.json` as a portable index.
-- [ ] **Schema**:
-    ```json
-    {
-      "id": "hash",
-      "title": "Apple Pie",
-      "path": "C:\\Recipes\\A\\ApplePie.txt",
-      "tags": ["Dessert", "Fruit"],
-      "ingredients": ["Apples", "Flour", "Sugar"],
-      "last_cooked": "2023-10-27"
-    }
-    ```
-- [ ] **GUI**: Add a "Database View" tab to browse the index.
+### 🗃️ Metadata Database
+- [ ] **Define JSON Schema**: Structure for `recipes.json` (ID, Path, Tags, Date).
+- [ ] **Implement `Update-RecipeDatabase`**: Function to add/update/remove entries in the JSON index.
+- [ ] **Integration**: Call database updates during the main organization loop.
 
----
+### 🖥️ GUI Updates
+- [ ] **"Enable OCR" Checkbox**: Option to toggle slow OCR processing.
+- [ ] **"Remove Duplicates" Mode**: New operation mode or button to trigger cleanup.
+- [ ] **Database Stats**: Display count of managed recipes.
 
-## Version 3.0: Cloud & AI (Future)
-
-### 4. 🧠 Google Gemini Integration ("Chef AI")
-- [ ] **Target Audience**: Advanced Users.
-- [ ] **Auth**: Google OAuth 2.0 Login Button.
-- [ ] **Cloud Sync**: Google Drive integration for recipe storage.
-- [ ] **Shopping Lists**: Google Keep/Stack integration.
-- [ ] **Smart Parsing**: Use LLM to convert raw text/OCR output into structured JSON.
-- [ ] **Chat Interface**: "Chat with your Cookbook" tab.
+## Version 3.0: AI Chef (Future)
+- [ ] **Gemini AI Integration**: Parse unstructured text into structured ingredients/steps.
+- [ ] **Chat Interface**: "Chat with your Cookbook".
