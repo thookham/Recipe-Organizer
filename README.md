@@ -142,13 +142,14 @@ Run this in PowerShell **as Administrator**.
 
 ## 🗺️ Roadmap
 
-Want to see what's coming next? Check out our [TODO.md](TODO.md) for the full development roadmap!
+Want to see what's coming next? Check out our [ROADMAP.md](ROADMAP.md) for the full development roadmap!
 
 **Upcoming Features**:
 - **v2.0**: Duplicate detection, OCR for images, recipe database with search
 - **v3.0**: AI-powered features (Gemini integration, meal planning, nutrition tracking)
 
 ---
+
 
 ## 🤝 Contributing
 

@@ -1,4 +1,4 @@
-# 📝 Recipe Organizer - Development Roadmap
+# 🗺️ Recipe Organizer - Development Roadmap
 
 ## ✅ Version 1.0 - Foundation (Complete)
 Core file organization with GUI, keyword detection, and standalone executable.
