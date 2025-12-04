@@ -317,7 +317,7 @@ function Process-ZipFile {
         Write-Log -Message "Failed to process zip file $($ZipFile.Name): $_" -Level WARN -LogPath $LogPath
     }
 }
-}
+
 
 # Auto-Run if executed directly (not dot-sourced)
 if ($MyInvocation.InvocationName -ne '.') {
