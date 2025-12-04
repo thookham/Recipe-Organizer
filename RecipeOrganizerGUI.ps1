@@ -7,12 +7,27 @@ param(
 )
 
 # DEBUG LOGGING
-$DebugLog = "C:\Users\thook\Documents\Antigravity\Recipe Finder\debug_log.txt"
+# DEBUG LOGGING
+$DebugLog = Join-Path $PSScriptRoot "debug_log.txt"
 "--- Run at $(Get-Date) ---" | Out-File $DebugLog -Append
 "Source: '$SourcePath'" | Out-File $DebugLog -Append
 "Dest: '$DestinationPath'" | Out-File $DebugLog -Append
 "Mode: '$Mode'" | Out-File $DebugLog -Append
 "AutoRun: $AutoRun" | Out-File $DebugLog -Append
+
+# Ensure Backend Script is Loaded
+$BackendScript = Join-Path $PSScriptRoot "Organize-Recipes.ps1"
+if (Test-Path $BackendScript) {
+    . $BackendScript
+}
+else {
+    # If not found, maybe we are in a compiled state or it's missing.
+    # If compiled, the function should already be in memory (handled by Launcher/Build).
+    if (-not (Get-Command "Invoke-OrganizeRecipes" -ErrorAction SilentlyContinue)) {
+        [System.Windows.Forms.MessageBox]::Show("Error: Organize-Recipes.ps1 not found and function not loaded.", "Critical Error", [System.Windows.Forms.MessageBoxButtons]::OK, [System.Windows.Forms.MessageBoxIcon]::Error)
+        exit
+    }
+}
 
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing

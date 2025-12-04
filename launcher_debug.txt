@@ -73,12 +73,21 @@ Resolving: Microsoft.PowerShell.Commands.Management.resources, Version=3.0.0.0, 
 Resource NOT found: Microsoft.PowerShell.Commands.Management.resources.dll
 Resolving: Microsoft.PowerShell.Commands.Management.resources, Version=3.0.0.0, Culture=en-US, PublicKeyToken=31bf3856ad364e35
 Resource NOT found: Microsoft.PowerShell.Commands.Management.resources.dll
-Resolving: Microsoft.WSMan.Management.resources, Version=3.0.0.0, Culture=en-US, PublicKeyToken=31bf3856ad364e35
-Resource NOT found: Microsoft.WSMan.Management.resources.dll
-Resolving: Microsoft.WSMan.Management.resources, Version=3.0.0.0, Culture=en-US, PublicKeyToken=31bf3856ad364e35
-Resource NOT found: Microsoft.WSMan.Management.resources.dll
 Resolving: System.Management.Automation.resources, Version=3.0.0.0, Culture=en-US, PublicKeyToken=31bf3856ad364e35
 Resource NOT found: System.Management.Automation.resources.dll
 Resolving: System.Management.Automation.resources, Version=3.0.0.0, Culture=en-US, PublicKeyToken=31bf3856ad364e35
 Resource NOT found: System.Management.Automation.resources.dll
+Resolving: Microsoft.WSMan.Management.resources, Version=3.0.0.0, Culture=en-US, PublicKeyToken=31bf3856ad364e35
+Resource NOT found: Microsoft.WSMan.Management.resources.dll
+Resolving: Microsoft.WSMan.Management.resources, Version=3.0.0.0, Culture=en-US, PublicKeyToken=31bf3856ad364e35
+Resource NOT found: Microsoft.WSMan.Management.resources.dll
+PowerShell Errors:
+Cannot bind argument to parameter 'Path' because it is an empty string.
+Cannot bind argument to parameter 'FilePath' because it is null.
+Cannot bind argument to parameter 'FilePath' because it is null.
+Cannot bind argument to parameter 'FilePath' because it is null.
+Cannot bind argument to parameter 'FilePath' because it is null.
+Cannot bind argument to parameter 'FilePath' because it is null.
+Cannot bind argument to parameter 'Path' because it is an empty string.
+Cannot bind argument to parameter 'Path' because it is null.
 RunApp Finished

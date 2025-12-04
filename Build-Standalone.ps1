@@ -34,14 +34,10 @@ else {
 }
 
 # Prepare Resources
-# 1. Wrap Organize-Recipes.ps1 in a function "Invoke-OrganizeRecipes"
-$RawScript = Get-Content $ScriptPath -Raw
-# We need to ensure the wrapper handles the parameters correctly.
-# Best way: function Invoke-OrganizeRecipes { [CmdletBinding()] param(...) <script> }
-# But the script already has param(). We can just wrap it.
-$WrappedScript = "function Global:Invoke-OrganizeRecipes { `r`n $RawScript `r`n }"
+# 1. Backend Script (Already contains Invoke-OrganizeRecipes)
+$ScriptContent = Get-Content $ScriptPath -Raw
 $ScriptResFile = Join-Path $ReleaseDir "script.b64"
-[System.IO.File]::WriteAllText($ScriptResFile, [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($WrappedScript)))
+[System.IO.File]::WriteAllText($ScriptResFile, [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($ScriptContent)))
 
 # 2. GUI Script (No changes needed, just encode)
 $GuiResFile = Join-Path $ReleaseDir "gui.b64"
