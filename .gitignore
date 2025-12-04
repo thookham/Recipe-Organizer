@@ -26,3 +26,6 @@ OrganizedReleaseTest/
 # OS
 Thumbs.db
 Desktop.ini
+
+# Database
+recipes.json

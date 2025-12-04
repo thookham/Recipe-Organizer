@@ -1,6 +1,7 @@
 # 🗺️ Recipe Organizer - Development Roadmap
 
 ## ✅ Version 1.0 - Foundation (Complete)
+
 Core file organization with GUI, keyword detection, and standalone executable.
 
 ---
@@ -8,6 +9,7 @@ Core file organization with GUI, keyword detection, and standalone executable.
 ## 🚧 Version 2.0 - Smart Management (Current Focus)
 
 ### Phase 0: Developer Experience & Distribution
+
 **Goal**: Make the tool easier to distribute and trust
 
 - [ ] **Code Signing**
@@ -17,6 +19,7 @@ Core file organization with GUI, keyword detection, and standalone executable.
   - [ ] Document certificate renewal process
 
 ### Phase 1: Data Integrity & Cleanup
+
 **Goal**: Help users clean up messy recipe collections
 
 - [ ] **Duplicate Detection System**
@@ -26,6 +29,7 @@ Core file organization with GUI, keyword detection, and standalone executable.
   - [ ] **Safe Move**: Quarantine duplicates to `_Duplicates` folder (don't delete immediately)
 
 **Technical Implementation**:
+
 ```powershell
 function Find-ExactDuplicates {
     param([string]$Path)
@@ -43,6 +47,7 @@ function Find-ExactDuplicates {
 ```
 
 ### Phase 2: Image Recipe Support
+
 **Goal**: Make scanned recipes and photos searchable
 
 - [ ] **OCR Engine Research**
@@ -64,16 +69,17 @@ function Find-ExactDuplicates {
 **Technical Implementation**: Using Windows.Media.Ocr WinRT API via PowerShell
 
 ### Phase 3: Recipe Index & Search
+
 **Goal**: Fast search across all recipes without opening files
 
 - [ ] **Database Design**
-  - [ ] Define `recipes.json` schema (see below)
-  - [ ] Add migration logic for existing organized folders
-  - [ ] Include file hash for integrity checks
+  - [x] Define `recipes.json` schema (see below)
+  - [x] Add migration logic for existing organized folders
+  - [x] Include file hash for integrity checks
   
 - [ ] **Index Management**
-  - [ ] `Update-RecipeDatabase`: Add/update/remove entries
-  - [ ] Auto-update on file organization
+  - [x] `Update-RecipeDatabase`: Add/update/remove entries
+  - [x] Auto-update on file organization
   - [ ] Rebuild index command (for corrupted databases)
   
 - [ ] **Search Features**
@@ -82,6 +88,7 @@ function Find-ExactDuplicates {
   - [ ] "Recent Recipes" view (last 10 organized)
 
 **Schema**:
+
 ```json
 {
   "id": "sha256-hash",
@@ -96,6 +103,7 @@ function Find-ExactDuplicates {
 ```
 
 ### Phase 4: UI/UX Improvements
+
 - [ ] **New GUI Tab**: "Manage Database" (view stats, rebuild index, export list)
 - [ ] **Batch Actions**: Select multiple recipes for tagging or category change
 - [ ] **Settings Panel**: Configure OCR quality, duplicate sensitivity, default paths
@@ -105,11 +113,13 @@ function Find-ExactDuplicates {
 ## 🔮 Version 3.0 - AI Chef (Future Vision)
 
 ### 🧠 Smart Recipe Parsing
+
 - [ ] **Gemini AI Integration**: Parse unstructured text → structured JSON (ingredients, steps, cook time)
 - [ ] **Auto-Tagging**: Automatically tag recipes (cuisine type, difficulty, dietary restrictions)
 - [ ] **Extract Nutrition**: Parse ingredient amounts → estimate calories/macros
 
 ### 💬 Interactive Cookbook
+
 - [ ] **Chat Interface**: "Chat with your Cookbook" - natural language recipe search
 - [ ] **Voice Commands**: "Find chicken recipes under 30 minutes"
 - [ ] **Smart Suggestions**: "What can I cook with chicken, pasta, and garlic?"
@@ -117,18 +127,21 @@ function Find-ExactDuplicates {
 **Technical**: RAG (Retrieval Augmented Generation) with vector embeddings
 
 ### 🍽️ Meal Planning & Grocery Management
+
 - [ ] **Weekly Meal Planner**: AI suggests recipes from your collection for the week
 - [ ] **Auto-Generated Shopping Lists**: Select recipes → get consolidated grocery list
 - [ ] **Pantry Tracker**: Mark what ingredients you have → "cook with what you have" mode
 - [ ] **Ingredient Inventory**: Track expiration dates, suggest recipes before food spoils
 
 ### 🔄 Recipe Intelligence
+
 - [ ] **Ingredient Substitutions**: "I'm out of eggs" → AI suggests alternatives (applesauce, flax eggs)
 - [ ] **Unit Converter**: Auto-convert metric ↔ imperial (cups → grams)
 - [ ] **Servings Scaler**: Adjust from 4 to 12 servings, update all ingredients proportionally
 - [ ] **Recipe Difficulty Rating**: AI analyzes steps → assigns beginner/intermediate/advanced
 
 ### 💪 Nutrition & Health
+
 - [ ] **Auto-Calculate Nutrition**: Extract amounts → estimate calories, protein, carbs, fat
 - [ ] **Dietary Filtering**: "Show me vegan recipes" or "gluten-free desserts"
 - [ ] **Allergen Detection**: Flag recipes containing nuts, dairy, shellfish, etc.
@@ -136,6 +149,7 @@ function Find-ExactDuplicates {
 - [ ] **Nutrition Labels**: Generate FDA-style nutrition facts for each recipe
 
 ### 📱 Modern Integrations
+
 - [ ] **Voice Cooking Mode**: Hands-free step-by-step guidance while cooking
 - [ ] **Import from URL**: Paste recipe link → AI extracts and adds to collection
 - [ ] **Export Beautiful PDFs**: Generate print-ready cookbooks from your collection
@@ -143,6 +157,7 @@ function Find-ExactDuplicates {
 - [ ] **Social Features**: "Friends also made this recipe" (opt-in)
 
 ### 🎯 Smart Recommendations
+
 - [ ] **"You Haven't Made This"**: Reminders for favorites you haven't cooked in 3+ months
 - [ ] **Seasonal Suggestions**: "Fall recipes to try" based on current date
 - [ ] **Skill Progression**: Start with easy recipes, gradually suggest harder ones
@@ -150,6 +165,7 @@ function Find-ExactDuplicates {
 - [ ] **Trending in Your Collection**: See which recipes you cook most often
 
 ### 🔐 Technical Requirements
+
 - [ ] User-provided Gemini API Key (secure storage via Windows DPAPI)
 - [ ] Internet connection required for AI features
 - [ ] Privacy: All AI processing via user's own API quota
@@ -162,6 +178,7 @@ function Find-ExactDuplicates {
 ## 🎯 Priority Order
 
 **Next Up (v2.0 - Phase 1)**:
+
 1. Duplicate detection (most requested feature)
 2. Basic database for future search
 

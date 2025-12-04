@@ -31,6 +31,33 @@
     .\Organize-Recipes.ps1 -Mode Test -Verbose
 #>
 
+[CmdletBinding()]
+param (
+    [Parameter(Mandatory = $false)]
+    [Alias("src", "s")]
+    [string]$SourcePath = [Environment]::GetFolderPath("MyDocuments"),
+    
+    [Parameter(Mandatory = $false)]
+    [Alias("dst", "d")]
+    [string]$DestinationPath = [System.IO.Path]::Combine([Environment]::GetFolderPath("MyDocuments"), "OrganizedRecipes"),
+
+    [Parameter(Mandatory = $false)]
+    [Alias("mod", "m")]
+    [ValidateSet("Test", "Copy", "Move")]
+    [string]$Mode = "Test",
+
+    [Parameter(Mandatory = $false)]
+    [Alias("key", "k")]
+    [string[]]$Keywords = @("Ingredients", "Directions", "Recipe", "Servings", "Prep time", "Cook time", "Instructions", "Method", "Yield", "Total time", "Nutrition", "Calories"),
+
+    [Parameter(Mandatory = $false)]
+    [Alias("nr")]
+    [switch]$NoRecurse,
+
+    [Parameter(Mandatory = $false)]
+    [string]$LogPath
+)
+
 function Invoke-OrganizeRecipes {
     [CmdletBinding()]
     param (
@@ -141,6 +168,18 @@ function Invoke-OrganizeRecipes {
     Write-Log -Message "Scan Complete."
     Write-Log -Message "Total Files Scanned: $count" -LogPath $LogPath
     Write-Log -Message "Recipes Found: $found" -LogPath $LogPath
+
+    # Update Database if changes were made
+    if ($Mode -ne "Test" -and $found -gt 0) {
+        $dbScript = Join-Path -Path $PSScriptRoot -ChildPath "Update-RecipeDatabase.ps1"
+        if (Test-Path $dbScript) {
+            Write-Log -Message "Updating Recipe Database..." -Level INFO -Color Cyan
+            & $dbScript -RootPath $DestinationPath
+        }
+        else {
+            Write-Log -Message "Database update script not found at $dbScript" -Level WARN
+        }
+    }
 }
 
 # --- Helper Functions ---

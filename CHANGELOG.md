@@ -1,5 +1,16 @@
 # Changelog
 
+## [v1.3.0] - 2025-12-04
+
+### Added
+
+- **Index Management**: Introduced `Update-RecipeDatabase.ps1` to maintain a JSON-based index of recipes (`recipes.json`).
+- **Auto-Update**: `Organize-Recipes.ps1` now automatically updates the recipe database after organizing files.
+
+### Fixed
+
+- **Parameter Binding**: Resolved a bug in `Organize-Recipes.ps1` where script arguments were ignored due to missing `param()` block.
+
 ## [v1.2.1] - 2025-12-03
 
 ### Added

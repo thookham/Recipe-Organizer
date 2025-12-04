@@ -12,6 +12,7 @@ A powerful tool to identify, organize, and centralize your recipe files automati
 - **🕵️ Smart Detection**: Identifies recipes by keywords (Ingredients, Method, etc.) and filenames
 - **📄 Multi-Format Support**: Works with `.docx`, `.doc`, `.pdf`, `.txt`, `.tiff`, and `.zip` files
 - **📂 Automatic Organization**: Sorts recipes into A-Z folders based on filename
+- **🗃️ Recipe Database**: Maintains a searchable `recipes.json` index of your collection
 - **🎛️ Easy Controls**: Browse for folders, select modes, and toggle options with checkboxes
 - **📝 Toggleable Log**: Show/hide detailed progress logs to keep the interface clean
 - **⚡ Performance**: Animated progress bar with real-time status updates
