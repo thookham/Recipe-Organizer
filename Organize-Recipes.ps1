@@ -122,6 +122,7 @@ function Invoke-OrganizeRecipes {
 
     $count = 0
     $found = 0
+    $seenHashes = @{}
 
     foreach ($file in $files) {
         $count++
@@ -135,14 +136,41 @@ function Invoke-OrganizeRecipes {
         $content = Get-FileText -File $file -LogPath $LogPath
         if (Test-IsRecipe -Content $content -Filename $file.Name -Keywords $Keywords -LogPath $LogPath) {
             $found++
-            $firstLetter = $file.Name.Substring(0, 1).ToUpper()
-            if ($firstLetter -notmatch "[A-Z]") { $firstLetter = "#" }
             
-            $targetFolder = Join-Path -Path $DestinationPath -ChildPath $firstLetter
-            $targetFile = Join-Path -Path $targetFolder -ChildPath $file.Name
+            # --- Duplicate Detection ---
+            $hashObj = Get-FileHash -Path $file.FullName -Algorithm SHA256
+            $fileHash = $hashObj.Hash
 
-            $actionMsg = "[$Mode] Found Recipe: $($file.FullName)"
-            
+            if ($seenHashes.ContainsKey($fileHash)) {
+                $originalFile = $seenHashes[$fileHash]
+                Write-Log -Message "DUPLICATE DETECTED: $($file.Name)" -Level WARN -Color Yellow -LogPath $LogPath
+                Write-Log -Message "  Matches: $originalFile" -Level WARN -Color Gray -LogPath $LogPath
+                
+                $targetFolder = Join-Path -Path $DestinationPath -ChildPath "_Duplicates"
+                $targetFile = Join-Path -Path $targetFolder -ChildPath $file.Name
+                
+                # Append hash to filename if it collides in _Duplicates too
+                if (Test-Path $targetFile) {
+                    $ext = $file.Extension
+                    $base = $file.Name.Substring(0, $file.Name.Length - $ext.Length)
+                    $targetFile = Join-Path -Path $targetFolder -ChildPath "$($base)_$($fileHash.Substring(0,8))$ext"
+                }
+
+                $actionMsg = "[$Mode] Quarantining Duplicate: $($file.FullName) -> $targetFolder"
+            }
+            else {
+                # New unique recipe
+                $seenHashes[$fileHash] = $file.FullName
+                
+                $firstLetter = $file.Name.Substring(0, 1).ToUpper()
+                if ($firstLetter -notmatch "[A-Z]") { $firstLetter = "#" }
+                
+                $targetFolder = Join-Path -Path $DestinationPath -ChildPath $firstLetter
+                $targetFile = Join-Path -Path $targetFolder -ChildPath $file.Name
+                
+                $actionMsg = "[$Mode] Found Recipe: $($file.FullName)"
+            }
+
             if ($Mode -eq "Test") {
                 Write-Log -Message $actionMsg -Level INFO -Color Green -LogPath $LogPath
                 Write-Log -Message "  -> Would move/copy to: $targetFile" -Level INFO -Color Gray -LogPath $LogPath
