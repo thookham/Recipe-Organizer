@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 
 namespace RecipeOrganizer
@@ -10,9 +11,11 @@ namespace RecipeOrganizer
     public class Organizer
     {
         public event Action<string, string, ConsoleColor> OnLog;
+        public event Action<int, int> OnProgress; // current, total
 
         private readonly string[] _keywords;
         private readonly bool _noRecurse;
+        private readonly Dictionary<string, string> _seenHashes = new Dictionary<string, string>();
 
         public Organizer(string[] keywords, bool noRecurse)
         {
@@ -25,8 +28,11 @@ namespace RecipeOrganizer
             if (OnLog != null) OnLog(message, level, color);
         }
 
-        public void Organize(string sourcePath, string destPath, string mode)
+        public int Organize(string sourcePath, string destPath, string mode)
         {
+            _seenHashes.Clear();
+            int found = 0;
+
             Log(string.Format("Starting Organization in '{0}' mode.", mode), "INFO", ConsoleColor.Cyan);
             Log(string.Format("Source: {0}", sourcePath));
             Log(string.Format("Destination: {0}", destPath));
@@ -34,7 +40,7 @@ namespace RecipeOrganizer
             if (!Directory.Exists(sourcePath))
             {
                 Log(string.Format("Source path does not exist: {0}", sourcePath), "ERROR", ConsoleColor.Red);
-                return;
+                return 0;
             }
 
             if (mode != "Test" && !Directory.Exists(destPath))
@@ -50,9 +56,12 @@ namespace RecipeOrganizer
 
             Log(string.Format("Found {0} files to scan.", files.Count), "INFO", ConsoleColor.Cyan);
 
-            int found = 0;
+            int count = 0;
             foreach (var file in files)
             {
+                count++;
+                OnProgress?.Invoke(count, files.Count);
+
                 var fileInfo = new FileInfo(file);
                 Log(string.Format("Processing {0}...", fileInfo.Name), "DEBUG");
 
@@ -72,17 +81,54 @@ namespace RecipeOrganizer
 
             Log("--------------------------------------------------");
             Log(string.Format("Scan Complete. Recipes Found: {0}", found));
+
+            return found;
         }
 
         private void ProcessFile(FileInfo file, string destPath, string mode)
         {
-            string firstLetter = char.ToUpper(file.Name[0]).ToString();
-            if (!Regex.IsMatch(firstLetter, "[A-Z]")) firstLetter = "#";
+            string targetFolder;
+            string targetFile;
+            string actionMsg;
 
-            string targetFolder = Path.Combine(destPath, firstLetter);
-            string targetFile = Path.Combine(targetFolder, file.Name);
+            // Duplicate Detection via SHA256
+            string fileHash = GetFileHash(file.FullName);
 
-            Log(string.Format("[{0}] Found Recipe: {1}", mode, file.FullName), "INFO", ConsoleColor.Green);
+            if (_seenHashes.ContainsKey(fileHash))
+            {
+                string originalFile = _seenHashes[fileHash];
+                Log(string.Format("DUPLICATE DETECTED: {0}", file.Name), "WARN", ConsoleColor.Yellow);
+                Log(string.Format("  Matches: {0}", originalFile), "WARN", ConsoleColor.Gray);
+
+                targetFolder = Path.Combine(destPath, "_Duplicates");
+
+                // Handle filename collision in _Duplicates
+                string baseName = Path.GetFileNameWithoutExtension(file.Name);
+                string ext = file.Extension;
+                targetFile = Path.Combine(targetFolder, file.Name);
+
+                if (File.Exists(targetFile))
+                {
+                    targetFile = Path.Combine(targetFolder, string.Format("{0}_{1}{2}", baseName, fileHash.Substring(0, 8), ext));
+                }
+
+                actionMsg = string.Format("[{0}] Quarantining Duplicate: {1}", mode, file.FullName);
+            }
+            else
+            {
+                // New unique recipe
+                _seenHashes[fileHash] = file.FullName;
+
+                string firstLetter = char.ToUpper(file.Name[0]).ToString();
+                if (!Regex.IsMatch(firstLetter, "[A-Z]")) firstLetter = "#";
+
+                targetFolder = Path.Combine(destPath, firstLetter);
+                targetFile = Path.Combine(targetFolder, file.Name);
+
+                actionMsg = string.Format("[{0}] Found Recipe: {1}", mode, file.FullName);
+            }
+
+            Log(actionMsg, "INFO", ConsoleColor.Green);
 
             if (mode == "Test")
             {
@@ -110,6 +156,16 @@ namespace RecipeOrganizer
                 {
                     Log(string.Format("Error processing file {0}: {1}", file.Name, ex.Message), "ERROR", ConsoleColor.Red);
                 }
+            }
+        }
+
+        private string GetFileHash(string filePath)
+        {
+            using (var sha256 = SHA256.Create())
+            using (var stream = File.OpenRead(filePath))
+            {
+                byte[] hashBytes = sha256.ComputeHash(stream);
+                return BitConverter.ToString(hashBytes).Replace("-", "").ToUpperInvariant();
             }
         }
 
@@ -186,7 +242,7 @@ namespace RecipeOrganizer
             try
             {
                 string ext = file.Extension.ToLower();
-                if (ext == ".txt" || ext == ".doc" || ext == ".pdf") // Simple read for now
+                if (ext == ".txt" || ext == ".doc" || ext == ".pdf")
                 {
                     return File.ReadAllText(file.FullName);
                 }

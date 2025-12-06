@@ -1,5 +1,31 @@
 # Changelog
 
+## [v2.0.0] - 2025-12-05 🎉 C# Feature Parity
+
+### Added
+
+- **Duplicate Detection**: SHA256 hash comparison to identify identical files; duplicates quarantined to `_Duplicates` folder instead of overwriting.
+- **Recipe Database (C#)**: Native `RecipeDatabase.cs` class that updates `recipes.json` after organization, matching the PowerShell schema.
+- **CLI Arguments**: Full command-line support in C# app: `-SourcePath`, `-DestinationPath`, `-Mode`, `-AutoRun`, `--help`.
+- **Progress Events**: Real-time progress bar updates via `OnProgress` event in `Organizer.cs`.
+
+### Changed
+
+- **UI Overhaul**: Complete MainForm.cs rewrite with:
+  - Toggleable log panel (form resizes 400→600 height)
+  - Animation timer with "Working..." status dots
+  - Dynamic button text based on selected mode (Test/Copy/Move)
+  - PowerShell-matching styling (Dark Orange header, Emerald button)
+  - Segoe UI Emoji font for proper emoji rendering
+- **Better Architecture**: Organizer now returns found count to trigger database updates.
+
+### Technical
+
+- Added `System.Text.Json` package for JSON serialization.
+- Requires .NET 6 SDK to build.
+
+---
+
 ## [v1.3.0] - 2025-12-04
 
 ### Added

@@ -150,7 +150,7 @@ Run this in PowerShell **as Administrator**.
 ## 📋 Requirements
 
 - **OS**: Windows 10 or Windows 11
-- **.NET Framework**: 4.5+ (pre-installed on modern Windows)
+- **.NET 6 SDK**: Required only if building from source ([Download](https://dotnet.microsoft.com/download/dotnet/6.0))
 - **PowerShell**: 5.1 or later (for script mode)
 
 ---
@@ -159,9 +159,15 @@ Run this in PowerShell **as Administrator**.
 
 Want to see what's coming next? Check out our [ROADMAP.md](ROADMAP.md) for the full development roadmap!
 
+**v2.0 Features** (Now Available! 🎉):
+
+- ✅ Duplicate detection (SHA256 hash comparison)
+- ✅ Recipe database with JSON index
+- ✅ Full C# feature parity with PowerShell version
+
 **Upcoming Features**:
 
-- **v2.0**: Duplicate detection, OCR for images, recipe database with search
+- **v2.1**: OCR for image recipes, fuzzy filename matching
 - **v3.0**: AI-powered features (Gemini integration, meal planning, nutrition tracking)
 
 ---
