@@ -1,8 +1,0 @@
-DEBUG: Starting Hosted Mode
-DEBUG: Function Definition Length: 10911
-DEBUG: Runspace Created
-DEBUG: Function Injected
-DEBUG: Source: C:\Users\thook\Documents\Antigravity\Recipe Finder\EdgeCases
-DEBUG: Dest: C:\Users\thook\Documents\Antigravity\Recipe Finder\SimulationOutput
-DEBUG: Parameters Added
-DEBUG: Async Invoke Started
