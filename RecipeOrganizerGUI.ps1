@@ -60,7 +60,7 @@ $c_text = [System.Drawing.Color]::FromArgb(255, 44, 62, 80) # Dark Blue/Grey
 # --- Form Setup ---
 $form = New-Object System.Windows.Forms.Form
 $form.Text = "$e_cooking Recipe Organizer"
-$form.Size = New-Object System.Drawing.Size(600, 400)
+$form.Size = New-Object System.Drawing.Size(600, 425)
 $form.StartPosition = "CenterScreen"
 $form.FormBorderStyle = "FixedDialog"
 $form.MaximizeBox = $false
@@ -75,9 +75,57 @@ $fontEmoji = New-Object System.Drawing.Font("Segoe UI Emoji", 10)
 $fontEmojiBold = New-Object System.Drawing.Font("Segoe UI Emoji", 10, [System.Drawing.FontStyle]::Bold)
 $fontLog = New-Object System.Drawing.Font("Consolas", 9)
 
+# --- Menu Strip ---
+$menuStrip = New-Object System.Windows.Forms.MenuStrip
+$menuStrip.BackColor = [System.Drawing.Color]::WhiteSmoke
+$form.MainMenuStrip = $menuStrip
+$form.Controls.Add($menuStrip)
+
+$menuDatabase = New-Object System.Windows.Forms.ToolStripMenuItem
+$menuDatabase.Text = "Database"
+$menuStrip.Items.Add($menuDatabase)
+
+$menuRebuild = New-Object System.Windows.Forms.ToolStripMenuItem
+$menuRebuild.Text = "Rebuild Index"
+$menuRebuild.Add_Click({
+        $btnRun.Enabled = $false
+        $lblStatus.Text = "Rebuilding index... $e_rocket"
+        $form.Cursor = [System.Windows.Forms.Cursors]::WaitCursor
+    
+        $script = Join-Path $PSScriptRoot "Update-RecipeDatabase.ps1"
+        if (Test-Path $script) {
+            $txtLog.AppendText("`r`n--- Rebuilding Index ---`r`n")
+            try {
+                # Run script and capture output
+                $destPath = $txtDest.Text
+                if (-not (Test-Path $destPath)) {
+                    $txtLog.AppendText("Destination path does not exist. Creating...`r`n")
+                    New-Item -Path $destPath -ItemType Directory -Force | Out-Null
+                }
+            
+                $output = & $script -RootPath $destPath -OutputPath (Join-Path $destPath "recipes.json") *>&1 | Out-String
+                $txtLog.AppendText($output)
+                $txtLog.AppendText("`r`nDone.`r`n")
+                [System.Windows.Forms.MessageBox]::Show("Index rebuilt successfully!", "Success", [System.Windows.Forms.MessageBoxButtons]::OK, [System.Windows.Forms.MessageBoxIcon]::Information)
+            }
+            catch {
+                $txtLog.AppendText("Error: $_`r`n")
+                [System.Windows.Forms.MessageBox]::Show("Error rebuilding index: $_", "Error", [System.Windows.Forms.MessageBoxButtons]::OK, [System.Windows.Forms.MessageBoxIcon]::Error)
+            }
+        }
+        else {
+            [System.Windows.Forms.MessageBox]::Show("Update-RecipeDatabase.ps1 not found!", "Error", [System.Windows.Forms.MessageBoxButtons]::OK, [System.Windows.Forms.MessageBoxIcon]::Error)
+        }
+
+        $btnRun.Enabled = $true
+        $lblStatus.Text = "Ready to organize! $e_cooking"
+        $form.Cursor = [System.Windows.Forms.Cursors]::Default
+    })
+$menuDatabase.DropDownItems.Add($menuRebuild)
+
 # --- Header Panel ---
 $pnlHeader = New-Object System.Windows.Forms.Panel
-$pnlHeader.Location = New-Object System.Drawing.Point(0, 0)
+$pnlHeader.Location = New-Object System.Drawing.Point(0, 25)
 $pnlHeader.Size = New-Object System.Drawing.Size(600, 60)
 $pnlHeader.BackColor = $c_header
 $form.Controls.Add($pnlHeader)
@@ -94,7 +142,7 @@ $pnlHeader.Controls.Add($lblHeader)
 
 # --- Main Content Panel ---
 $pnlMain = New-Object System.Windows.Forms.Panel
-$pnlMain.Location = New-Object System.Drawing.Point(0, 60)
+$pnlMain.Location = New-Object System.Drawing.Point(0, 85)
 $pnlMain.Size = New-Object System.Drawing.Size(600, 340)
 $form.Controls.Add($pnlMain)
 
